@@ -1,0 +1,27 @@
+{
+    "name": "julit/julavel",
+    "description": "Collection of small helpers",
+    "keywords": ["laravel", "testing"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marcus Winter",
+            "email": "mw@zrikusdigitalo.com"
+        },
+        {
+            "name": "Sebastian Heinlein",
+            "email": "devel@glatzor.de"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Julavel\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
