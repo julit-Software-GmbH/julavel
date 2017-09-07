@@ -30,12 +30,23 @@ trait BuiltinServer
     protected static $serverErrorOutput;
 
     /**
+     * Working directory of the server
+     *
+     * @var sting
+     */
+    protected static $serverWorkingDir;
+
+    /**
      * Start the builtin web server process.
+     *
+     * @param string $baseDir The root directory of the laravel project.
      *
      * @return void
      */
-    public static function startBuiltinServer()
+    public static function startBuiltinServer(string $baseDir)
     {
+        static::$serverWorkingDir = $baseDir;
+
         static::$serverProcess = static::buildBuildinServerProcess();
 
         static::$serverProcess->start();
@@ -78,8 +89,8 @@ trait BuiltinServer
     protected static function buildBuildinServerProcess()
     {
         $pathExec   = realpath((new PhpExecutableFinder)->find(false));
-        $pathServer = realpath(sprintf('%s/../../../server.php', __DIR__));
-        $pathBase   = realpath(sprintf('%s/../../../public', __DIR__));
+        $pathServer = realpath(sprintf('%s/server.php', static::$serverWorkingDir));
+        $pathBase   = realpath(sprintf('%s/public', static::$serverWorkingDir));
 
         return new Process([$pathExec, '-S=127.0.0.1:8000', $pathServer], $pathBase);
     }
