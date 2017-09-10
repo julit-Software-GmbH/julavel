@@ -2,23 +2,57 @@
 
 namespace Julavel\Testing\Traits;
 
+use File;
+use RuntimeException;
+
 trait TemporaryStorage
 {
     /**
-     * Create a temporary storage for the application.
+     * Create and return the name of a temporary directory.
      *
-     * @return void
+     * @param   string prefix The prefix of the directoy name
+     * @throws  \RuntimeExpcetion
+     * @return  string
+     */
+    protected function createTemporaryDirectory(string $prefix)
+    {
+        $attemps    = 5;
+        $path       = sprintf(
+            "%s%s%s.%d",
+            sys_get_temp_dir(),
+            DIRECTORY_SEPARATOR,
+            $prefix,
+            random_int(10000000, 99999999)
+        );
+
+        do {
+            if (@mkdir($path)) {
+                return $path;
+            }
+        } while (0 < --$attemps);
+
+        throw new RuntimeException(sprintf(
+            'Failed to create temporary directory [%s]',
+            $path
+        ));
+    }
+
+    /**
+     * Set the storage of the application to a temporary directory.
+     *
+     * @throws  \RuntimeExpcetion
+     * @return  void
      */
     public function setTemporaryStorage()
     {
         $prefix = (
             'laravel-' .
             app('env') . '-'
-            . basename(str_replace('\\', '/', get_class($this))) . '-'
+            . class_basename(get_class($this)) . '-'
             . $this->getName()
-            . '.XXXXXXXXXX'
         );
-        $storagePath = exec(sprintf('mktemp -d %s/%s', sys_get_temp_dir(), $prefix));
+
+        $storagePath = $this->createTemporaryDirectory($prefix);
 
         $this->app->useStoragePath($storagePath);
         mkdir(storage_path('/app/public'), 0775, true);
@@ -40,7 +74,7 @@ trait TemporaryStorage
         if (env('KEEP_TEMP_STORAGE', false) === true) {
             printf('Keeping temporary storage[%s]%s', storage_path(), PHP_EOL);
         } elseif (0 === strpos(storage_path(), sys_get_temp_dir() . '/')) {
-            \File::deleteDirectory(storage_path());
+            File::deleteDirectory(storage_path());
         } else {
             printf('Ignoring to remove invalid storage dir[%s]%s', storage_path(), PHP_EOL);
         }
