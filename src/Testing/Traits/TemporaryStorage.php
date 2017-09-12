@@ -10,9 +10,11 @@ trait TemporaryStorage
     /**
      * Create and return the name of a temporary directory.
      *
-     * @param   string prefix The prefix of the directoy name
-     * @throws  \RuntimeExpcetion
-     * @return  string
+     * @param string $prefix The prefix of the directoy name
+     *
+     * @throws \RuntimeExpcetion
+     *
+     * @return string
      */
     protected function createTemporaryDirectory(string $prefix)
     {
@@ -31,17 +33,17 @@ trait TemporaryStorage
             }
         } while (0 < --$attemps);
 
-        throw new RuntimeException(sprintf(
-            'Failed to create temporary directory [%s]',
-            $path
-        ));
+        throw new RuntimeException(
+            sprintf('Failed to create temporary directory [%s]', $path)
+        );
     }
 
     /**
      * Set the storage of the application to a temporary directory.
      *
-     * @throws  \RuntimeExpcetion
-     * @return  void
+     * @throws \RuntimeExpcetion
+     *
+     * @return void
      */
     public function setTemporaryStorage()
     {
@@ -76,7 +78,11 @@ trait TemporaryStorage
         } elseif (0 === strpos(storage_path(), sys_get_temp_dir() . '/')) {
             File::deleteDirectory(storage_path());
         } else {
-            printf('Ignoring to remove invalid storage dir[%s]%s', storage_path(), PHP_EOL);
+            printf(
+                'Ignoring to remove invalid storage dir[%s]%s',
+                storage_path(),
+                PHP_EOL
+            );
         }
     }
 }
