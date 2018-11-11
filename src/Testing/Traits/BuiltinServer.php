@@ -91,8 +91,9 @@ trait BuiltinServer
         $pathExec   = realpath((new PhpExecutableFinder)->find(false));
         $pathServer = realpath(sprintf('%s/server.php', static::$serverWorkingDir));
         $pathBase   = realpath(sprintf('%s/public', static::$serverWorkingDir));
+        $address    = preg_replace('#^https?://#', '', rtrim(env('APP_URL'), '/'));
 
-        return new Process([$pathExec, '-S=127.0.0.1:8000', $pathServer], $pathBase);
+        return new Process([$pathExec, '-S', $address, $pathServer], $pathBase);
     }
 
     public function registerStoreServerLog()
