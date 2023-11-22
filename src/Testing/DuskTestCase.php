@@ -2,6 +2,7 @@
 
 namespace Julavel\Testing;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use Julavel\Testing\Traits\BuiltinServer;
 use Julavel\Testing\Traits\ElasticIndices;
@@ -31,6 +32,10 @@ abstract class DuskTestCase extends BaseTestCase
 
         if (isset($uses[BuiltinServer::class])) {
             $this->registerStoreServerLog();
+        }
+
+        if (isset($uses[RefreshDatabase::class])) {
+            $this->refreshDatabase();
         }
 
         return $uses;

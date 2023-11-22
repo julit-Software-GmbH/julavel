@@ -18,21 +18,21 @@ trait BuiltinServer
     /**
      * Server standard output
      *
-     * @var sting
+     * @var string
      */
     protected static $serverOutput;
 
     /**
      * Server error output
      *
-     * @var sting
+     * @var string
      */
     protected static $serverErrorOutput;
 
     /**
      * Working directory of the server
      *
-     * @var sting
+     * @var string
      */
     protected static $serverWorkingDir;
 
